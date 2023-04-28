@@ -1,10 +1,10 @@
-# scaping-soup
+# scraping-soup
 
 ## Installation
 
 Clone repository
 ```
-git clone https://github.com/akushyn/scraping-soup.git
+git clone https://github.com/Britva4ka/scraping-soup.git
 ```
 
 Create and activate virtual environment
