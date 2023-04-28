@@ -1,15 +1,14 @@
 from django.shortcuts import render
 from movies.models import Movie
 from shows.models import TVShow
-from services import ScrapeMoviesService, ScrapeShowsService
+from services import ScrapeService
 
 
 def index(request):
 
-    movie_service = ScrapeMoviesService()
-    show_service = ScrapeShowsService()
-    top_movies = movie_service.get_top_movies()
-    top_shows = show_service.get_top_shows()
+    service = ScrapeService()
+    top_movies = service.get_top_movies()
+    top_shows = service.get_top_shows()
     # top_movies = []
     # top_shows = []
     for top_movie in top_movies:

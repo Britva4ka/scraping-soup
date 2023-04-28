@@ -4,12 +4,13 @@ from bs4 import BeautifulSoup
 from config.settings import BASE_DIR
 
 
-class ScrapeMoviesService:
+class ScrapeService:
 
-    url = "https://www.imdb.com/chart/top"
+    url_movies = "https://www.imdb.com/chart/top"
+    url_shows = 'https://www.imdb.com/chart/tvmeter'
 
     def get_top_movies(self):
-        response = requests.get(self.url)
+        response = requests.get(self.url_movies)
         soup = BeautifulSoup(response.content, "html.parser")
 
         poster_tags = soup.find_all('td', class_="posterColumn")
@@ -35,29 +36,8 @@ class ScrapeMoviesService:
             )
         return results
 
-    def parse_poster_image(self, tag):
-        """
-        Parse image from posterColumn tag
-        :param tag:
-        :return:
-        """
-        return tag.find('img')['src']
-
-    def parse_title(self, tag):
-        return tag.find('a').text
-
-    def parse_year(self, tag):
-        return int(tag.find('span').text.lstrip('(').rstrip(')').strip())
-
-    def parse_rating(self, tag):
-        return float(tag.find('strong').text.strip())
-
-
-class ScrapeShowsService:
-    url = 'https://www.imdb.com/chart/tvmeter'
-
     def get_top_shows(self):
-        response = requests.get(self.url)
+        response = requests.get(self.url_shows)
         soup = BeautifulSoup(response.content, "html.parser")
 
         poster_tags = soup.find_all('td', class_="posterColumn")
@@ -106,17 +86,15 @@ class ScrapeShowsService:
 
 
 if __name__ == '__main__':
-    # service = ScrapeMoviesService()
-    # top_movies = service.get_top_movies()
-    #
-    # df = pd.DataFrame.from_dict(top_movies)
-    #
-    # output_file_path = BASE_DIR / 'movies.csv'
-    # df.to_csv(output_file_path)
-    service = ScrapeShowsService()
-    top_shows = service.get_top_movies()
+
+    service = ScrapeService()
+    top_movies = service.get_top_movies()
+    top_shows = service.get_top_shows()
+
+    df = pd.DataFrame.from_dict(top_movies)
+    output_file_path = BASE_DIR / 'movies.csv'
+    df.to_csv(output_file_path)
 
     df = pd.DataFrame.from_dict(top_shows)
-
     output_file_path = BASE_DIR / 'shows.csv'
     df.to_csv(output_file_path)
